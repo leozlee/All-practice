@@ -1,11 +1,15 @@
 #ifndef _WIFI_H_
 #define _WIFI_H_
 
-#include <iostream>
+#include "common.h"
 #include <string>
-#include <vector>
-#include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <net/if.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+
 
 class CWifi {
 public:
@@ -41,17 +45,19 @@ public:
 	// 设置网卡网关地址,IPv4
 	bool SetCardGateWayAddress(std::string &addr);
 
+	static CWifi *sInstance;
 private:
-    static CWifi sInstance;
+
 
 	bool mWifiAvailable;
+	std::string mdev;
 	std::string mAddress;
 	std::string mMacAddress;
 	std::string mMaskAddress;
 	std::string mGatewayAddress;
 
     CWifi();
-	void Getdata(void);
+	bool Getdata(void);
     ~CWifi();
 
 	CWifi(const CWifi &);
