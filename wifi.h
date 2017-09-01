@@ -49,6 +49,7 @@ public:
 private:
 
 
+	int mcnt;
 	bool mWifiAvailable;
 	std::string mdev;
 	std::string mAddress;

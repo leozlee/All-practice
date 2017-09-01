@@ -3,9 +3,6 @@
 #include "utils/utils.h"
 #include "log/logger.h"
 
-
-
-
 CWifi* CWifi::sInstance = NULL;
 
 #define     WIFI_PATH       "/proc/net/dev"
@@ -14,6 +11,9 @@ CWifi* CWifi::sInstance = NULL;
 #define     BUF                 800
 
 char  buf[BUF];
+
+
+#define UPDAET_CNT_TIME           100
 
 CWifi &CWifi::GetInstance() {
 	if (!sInstance)
@@ -24,6 +24,7 @@ CWifi &CWifi::GetInstance() {
 CWifi::CWifi() {
 	//初始化变量为空
 	mWifiAvailable = false;
+	mcnt = 0;
 	Getdata();
 }
 
@@ -55,10 +56,11 @@ bool  CWifi::Getdata()
 	if(std::string::npos == n)
 	{
 		LOGD(TAG,"dev not found");
+		mWifiAvailable = false;
+		return mWifiAvailable;
 	}
 	else
 	{
-		mWifiAvailable = true;
 		mdev = rawdata.substr(n,5);     //now we get the dev
 	}
 	close(fd);
@@ -132,10 +134,8 @@ bool  CWifi::Getdata()
 		         (unsigned char)ifr.ifr_netmask.sa_data[3],
 		         (unsigned char)ifr.ifr_netmask.sa_data[4],
 		         (unsigned char)ifr.ifr_netmask.sa_data[5]);
-		mMaskAddress = buf;
+		mMaskAddress = buf;                         //mask get
 	}
-
-
 
 	if (ioctl(sd, SIOCGIFBRDADDR, &ifr) < 0) {
 		LOGD(TAG, "ioctl  SIOCGIFBRDADDR error");
@@ -151,19 +151,25 @@ bool  CWifi::Getdata()
 		         (unsigned char)ifr.ifr_broadaddr.sa_data[3],
 		         (unsigned char)ifr.ifr_broadaddr.sa_data[4],
 		         (unsigned char)ifr.ifr_broadaddr.sa_data[5]);
-		mGatewayAddress = buf;
+		mGatewayAddress = buf;                  //bcast get
 	}
 
 	close(sd);
 
-	mWifiAvailable = false;
+	mWifiAvailable = true;
 	return mWifiAvailable;
 
 }
 
 bool CWifi::IsAvailable() {
-	if(!mWifiAvailable)
+	mcnt++;
+	if(mcnt > UPDAET_CNT_TIME)//update for wifi to check out if wifi
+	{
+		mcnt = 0;
 		Getdata();
+	}
+//	if(!mWifiAvailable)
+//		Getdata();
 	return mWifiAvailable;
 }
 
