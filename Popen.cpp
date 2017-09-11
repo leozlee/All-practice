@@ -27,6 +27,24 @@ bool Popen(const char* cmd,std::string &result)
     result = tmp;
     return true;
 }
+
+void Split(const std::string &s, const std::string &delim, std::vector<std::string> &ret) {
+    size_t last = 0;
+    size_t index = s.find_first_of(delim, last);
+    while (index != std::string::npos) {
+        if (index > last) {
+            ret.push_back(s.substr(last, index - last));
+        }
+        last = index + 1;
+        index = s.find_first_of(delim, last);
+    }
+    if (last < s.length()) {//获取最后一段的内容
+        ret.push_back(s.substr(last, index - last));
+    }
+}
+
+
+
 //
 //int main(int argc,char **argv)
 //{
