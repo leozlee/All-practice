@@ -1,9 +1,6 @@
-#include <boost/include/boost/regex.hpp>
 #include "wifi.h"
-#include "utils/utils.h"
-#include "log/logger.h"
 
-
+bool Popen(const char* cmd,std::string &result);
 
 
 CWifi* CWifi::sInstance = NULL;
@@ -38,14 +35,14 @@ bool  CWifi::Getdata()
 	fd = open(WIFI_PATH,O_RDONLY);
 	if(fd < 0)
 	{
-		LOGD(TAG,"open wifi_pat");
+		//LOGD(TAG,"open wifi_pat");
 		mWifiAvailable = false;
 		return mWifiAvailable;
 	}
 	bzero(buf,800);
 	if(read(fd,buf,800) < 0)
 	{
-		LOGD(TAG,"read error");
+		//LOGD(TAG,"read error");
 		close(fd);
 		mWifiAvailable = false;
 		return mWifiAvailable;
@@ -54,7 +51,7 @@ bool  CWifi::Getdata()
 	int n =rawdata.find("wlan");        //here we will find the dev like wlan*
 	if(std::string::npos == n)
 	{
-		LOGD(TAG,"dev not found");
+		//LOGD(TAG,"dev not found");
 	}
 	else
 	{
@@ -62,7 +59,6 @@ bool  CWifi::Getdata()
 		mdev = rawdata.substr(n,5);     //now we get the dev
 	}
 	close(fd);
-
 
 	//next we will get info lifo like ip/mac ......
 
@@ -73,7 +69,7 @@ bool  CWifi::Getdata()
 	sd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (-1 == sd)
 	{
-		LOGD(TAG,"socket error");
+		//LOGD(TAG,"socket error");
 		mWifiAvailable = false;
 		return mWifiAvailable;
 	}
@@ -85,7 +81,7 @@ bool  CWifi::Getdata()
 	// if error: No such device
 	if (ioctl(sd, SIOCGIFADDR, &ifr) < 0)
 	{
-		LOGD(TAG,"ioctl SIOCGIFADDR error");
+		//LOGD(TAG,"ioctl SIOCGIFADDR error");
 		close(sd);
 		mWifiAvailable = false;
 		return mWifiAvailable;
@@ -98,7 +94,7 @@ bool  CWifi::Getdata()
 
 	if (ioctl(sd, SIOCGIFHWADDR, &ifr) < 0)
 	{
-		LOGD(TAG,"ioctl  SIOCGIFHWADDR error");
+		//LOGD(TAG,"ioctl  SIOCGIFHWADDR error");
 		close(sd);
 		mWifiAvailable = false;
 		return mWifiAvailable;
@@ -119,7 +115,7 @@ bool  CWifi::Getdata()
 
 
 	if (ioctl(sd, SIOCGIFNETMASK, &ifr) < 0) {
-		LOGD(TAG, "ioctl  SIOCGIFNETMASK error");
+		//LOGD(TAG, "ioctl  SIOCGIFNETMASK error");
 		close(sd);
 		mWifiAvailable = false;
 		return mWifiAvailable;
@@ -138,7 +134,7 @@ bool  CWifi::Getdata()
 
 
 	if (ioctl(sd, SIOCGIFBRDADDR, &ifr) < 0) {
-		LOGD(TAG, "ioctl  SIOCGIFBRDADDR error");
+		//LOGD(TAG, "ioctl  SIOCGIFBRDADDR error");
 		close(sd);
 		mWifiAvailable = false;
 		return mWifiAvailable;

@@ -1,7 +1,7 @@
 #ifndef _WIFI_H_
 #define _WIFI_H_
 
-#include "common.h"
+#include <stdio.h>
 #include <string>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9,6 +9,11 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
+#include <strings.h>
+#include <string.h>
+
+
 
 
 class CWifi {

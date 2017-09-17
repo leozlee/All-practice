@@ -7,6 +7,22 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 
+
+if(1)
+    #cmak交差编译程序：
+    SET(CMAKE_SYSTEM_NAME Linux)
+
+    #指定C交叉编译器,必须配置
+    #或交叉编译器使用绝对地址
+    SET(CMAKE_C_COMPILER "arm-linux-gcc")
+
+    #指定C++交叉编译器
+    SET(CMAKE_CXX_COMPILER "arm-linux-g++")
+endif ()
+
+
+
+
 #simple test for use cmake
 set(SOURCE_FILES test.cpp)
 add_executable(test ${SOURCE_FILES})
@@ -14,7 +30,7 @@ add_executable(test ${SOURCE_FILES})
 #regex
 set(SOURCE_FILES regex.cpp)
 add_executable(test_regex ${SOURCE_FILES})
-target_link_libraries(test_regex -lboost_regex)
+#target_link_libraries(test_regex -lboost_regex)
 
 #十进制转转16进制函数
 #字符串函数
@@ -94,6 +110,12 @@ add_executable(test4addtest ${Gtest_2_source})
 target_link_libraries(test4addtest gtest gtest_main)
 
 
+set(WIFI_SOURCE wifi.cpp
+        wifi_unittest.cpp
+        Popen.cpp)
+add_executable(WIFI ${WIFI_SOURCE})
+
+
 ##以下测试用于wifi单元测试
 #这个编译选项用于生成gcovr所需的文件
 
@@ -103,6 +125,8 @@ set(WIFI_SOURCE wifi.cpp
 add_executable(WIFI_UNITTEST ${WIFI_SOURCE})
 target_link_libraries(WIFI_UNITTEST boost_regex)
 target_link_libraries(WIFI_UNITTEST gtest gtest_main)
+
+
 #add_custom_command(TARGET WIFI_UNITTEST
 #        POST_BUILD
 #        COMMADN echo "test"
@@ -110,7 +134,7 @@ target_link_libraries(WIFI_UNITTEST gtest gtest_main)
 #        )
 
 #add_custom_target(GCOVR ALL
-#        COMMAND echo "test")
+#        COMMAND echo "test\")
 
 
 

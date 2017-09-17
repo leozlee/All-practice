@@ -2,6 +2,8 @@
 // Created by leo on 8/20/17.
 //
 
+#if 0
+
 #include "wifi.h"
 #include "gtest/gtest.h"
 
@@ -32,3 +34,26 @@ TEST(WIFI_UNITTEST, GetCardGatewayAddress) {
     CWifi::GetInstance().GetCardGatewayAddress(mac);
     EXPECT_EQ("192.168.1.255", mac);
 }
+#else
+
+#include "wifi.h"
+#include <iostream>
+
+
+int main(void)
+{
+    std::string ip,mask,bcast,mac;
+    std::cout<<"hello world"<<std::endl;
+    CWifi::GetInstance().GetCardAddress(ip);
+    CWifi::GetInstance().GetCardGatewayAddress(bcast);
+    CWifi::GetInstance().GetCardMacAddress(mac);
+    CWifi::GetInstance().GetCardMaskAddress(mask);
+    std::cout << ip <<std::endl;
+    std::cout << mask <<std::endl;
+    std::cout << bcast <<std::endl;
+    std::cout << mac <<std::endl;
+
+}
+
+
+#endif
